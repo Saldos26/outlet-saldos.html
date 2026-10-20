@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Outlet & Saldos | Concordia, Entre Ríos</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="bg-stone-100 text-stone-900 min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-white pb-20 sm:pb-0">
+
+  <!-- BANNER POLÍTICAS -->
+  <div class="bg-amber-500 text-stone-950 font-semibold px-4 py-2 text-center text-xs md:text-sm tracking-wide flex items-center justify-center gap-2 shadow-sm flex-wrap">
+    <div class="flex items-center gap-1.5">
+      <i data-lucide="map-pin" class="w-4 h-4 shrink-0"></i>
+      <span><strong>Concordia, Entre Ríos:</strong> Envíos a cotizar o retiro en local.</span>
+    </div>
+    <span class="hidden md:inline">•</span>
+    <div class="flex items-center gap-1.5">
+      <i data-lucide="refresh-cw" class="w-4 h-4 shrink-0"></i>
+      <span>Cambios dentro de las <strong>48 hs</strong> sin excepción. Reserva por <strong>2 horas</strong>.</span>
+    </div>
+  </div>
+
+  <!-- ENCABEZADO -->
+  <header class="sticky top-0 z-30 bg-stone-900/95 backdrop-blur text-white border-b border-stone-800 shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-3.5 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-amber-500 text-stone-950 font-black flex items-center justify-center text-xl shadow-md">
+          %
+        </div>
+        <div>
+          <h1 class="text-lg md:text-xl font-extrabold tracking-tight leading-tight flex items-center gap-2">
+            SALDOS & OUTLET
+            <span class="text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded-full bg-stone-800 text-amber-400 border border-stone-700">Concordia E.R.</span>
+          </h1>
+          <p class="text-xs text-stone-400">Prendas seleccionadas a precio de liquidación</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2.5">
+        <button onclick="openSizeGuideModal()" class="hidden sm:flex items-center gap-1.5 text-xs text-stone-300 hover:text-white bg-stone-800 hover:bg-stone-700 px-3 py-2 rounded-xl transition border border-stone-700">
+          <i data-lucide="ruler" class="w-4 h-4 text-amber-400"></i>
+          <span>¿Cómo medimos?</span>
+        </button>
+
+        <button id="cartBtn" onclick="toggleCart(true)" class="relative flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold px-4 py-2 rounded-xl transition-all shadow-md hover:scale-[1.02] active:scale-95">
+          <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+          <span class="hidden sm:inline">Mi Pedido</span>
+          <span id="cartCountBadge" class="w-5 h-5 rounded-full bg-stone-950 text-amber-400 text-xs flex items-center justify-center font-black">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full flex-1">
+    
+    <!-- BARRA DE BÚSQUEDA Y FILTROS ORDENADOS -->
+    <section class="bg-white p-4 sm:p-5 rounded-2xl shadow-sm border border-stone-200/80 mb-6 space-y-4">
+      <div class="flex flex-col sm:flex-row gap-3">
+        <div class="relative flex-1">
+          <i data-lucide="search" class="w-5 h-5 absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400"></i>
+          <input 
+            type="text" 
+            id="searchInput" 
+            oninput="applyFilters()" 
+            placeholder="Buscar por prenda, código (#REM-115), color..." 
+            class="w-full pl-11 pr-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-stone-900 focus:bg-white transition"
+          >
+        </div>
+        <button onclick="openSizeGuideModal()" class="sm:hidden flex items-center justify-center gap-2 text-xs font-bold text-stone-700 bg-stone-100 hover:bg-stone-200 py-2.5 px-4 rounded-xl border border-stone-200">
+          <i data-lucide="ruler" class="w-4 h-4 text-amber-600"></i>
+          <span>Guía de Medidas</span>
+        </button>
+      </div>
+
+      <!-- Filtro por Categorías -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-1 text-xs md:text-sm no-scrollbar">
+        <span class="text-stone-400 font-medium shrink-0 flex items-center gap-1 mr-1">
+          <i data-lucide="tag" class="w-3.5 h-3.5"></i> Tipo:
+        </span>
+        <div id="categoryFilters" class="flex items-center gap-1.5 flex-nowrap"></div>
+      </div>
+
+      <!-- Filtro por Talles Estandarizado y Plegable -->
+      <div class="pt-2 border-t border-stone-100 space-y-2">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div class="flex items-center gap-1.5 text-xs font-bold text-stone-700">
+            <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5 text-amber-600"></i>
+            <span>Filtrar por Talle:</span>
+            <span id="activeSizeIndicator" class="ml-1 text-[11px] font-extrabold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200 hidden"></span>
+          </div>
+
+          <!-- Selector de Grupo de Talle -->
+          <div class="flex items-center gap-1 text-[11px] bg-stone-100 p-1 rounded-xl">
+            <button onclick="setSizeGroup('all')" id="grp-all" class="px-2.5 py-1 rounded-lg font-bold transition bg-stone-900 text-white">Todos</button>
+            <button onclick="setSizeGroup('letras')" id="grp-letras" class="px-2.5 py-1 rounded-lg font-bold transition text-stone-600 hover:text-stone-900">Letras (S-XXL)</button>
+            <button onclick="setSizeGroup('numeros')" id="grp-numeros" class="px-2.5 py-1 rounded-lg font-bold transition text-stone-600 hover:text-stone-900">Pantalón (38-48)</button>
+            <button onclick="setSizeGroup('especiales')" id="grp-especiales" class="px-2.5 py-1 rounded-lg font-bold transition text-stone-600 hover:text-stone-900">Especiales (3XL+)</button>
+          </div>
+        </div>
+
+        <!-- Lista compacta de botones de talle ordenada -->
+        <div id="sizeFilters" class="flex items-center gap-1.5 overflow-x-auto pb-1 flex-nowrap sm:flex-wrap no-scrollbar"></div>
+      </div>
+    </section>
+
+    <!-- RESUMEN DE RESULTADOS -->
+    <div class="flex items-center justify-between mb-4 px-1">
+      <p class="text-xs md:text-sm text-stone-500">
+        Mostrando <strong id="productCount" class="text-stone-900 font-bold">0</strong> prendas disponibles
+      </p>
+      <button onclick="resetFilters()" class="text-xs text-amber-700 hover:text-amber-800 font-semibold underline underline-offset-2">
+        Limpiar filtros
+      </button>
+    </div>
+
+    <!-- GRILLA DE PRODUCTOS -->
+    <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6"></div>
+
+    <!-- ESTADO VACÍO -->
+    <div id="emptyState" class="hidden text-center py-16 px-4 bg-white rounded-3xl border border-dashed border-stone-300 my-6">
+      <div class="w-16 h-16 bg-amber-50 rounded-2xl flex items-center justify-center text-amber-600 mx-auto mb-3">
+        <i data-lucide="search-x" class="w-8 h-8"></i>
+      </div>
+      <h3 class="text-base font-bold text-stone-800">No encontramos prendas disponibles</h3>
+      <p class="text-xs text-stone-500 mt-1 max-w-sm mx-auto">Probá seleccionando otro filtro de talle o categoría.</p>
+      <button onclick="resetFilters()" class="mt-4 px-4 py-2 bg-stone-900 text-white rounded-xl text-xs font-semibold hover:bg-stone-800">
+        Ver todo el catálogo
+      </button>
+    </div>
+  </main>
+
+  <!-- MODAL GUÍA DE MEDIDAS -->
+  <div id="sizeGuideModal" class="fixed inset-0 z-50 bg-stone-950/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl p-6 md:p-8 space-y-6 relative">
+      <button onclick="closeSizeGuideModal()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-700 flex items-center justify-center transition">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div>
+        <span class="text-xs font-bold text-amber-600 uppercase tracking-wider flex items-center gap-1.5 mb-1">
+          <i data-lucide="ruler" class="w-4 h-4"></i> Guía Práctica de Medidas
+        </span>
+        <h2 class="text-xl md:text-2xl font-black text-stone-900">¿Cómo medimos las prendas?</h2>
+        <p class="text-xs text-stone-500 mt-1">
+          Medidas tomadas <strong>sobre la prenda extendida en mesa plana</strong> (no sobre el cuerpo). Compará con una prenda similar que te quede bien.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-stone-50 p-4 rounded-2xl border border-stone-200 space-y-3">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-stone-900 flex items-center gap-2">
+            <i data-lucide="shirt" class="w-4 h-4 text-amber-600"></i> Remeras, Buzos y Camisacos
+          </h3>
+          <div class="bg-white p-3 rounded-xl border border-stone-200 flex items-center justify-center">
+            <svg class="w-36 h-36 text-stone-800" viewBox="0 0 200 200" fill="none" stroke="currentColor">
+              <path d="M60 40 L85 55 Q100 65 115 55 L140 40 L170 85 L145 95 L140 180 L60 180 L55 95 L30 85 Z" fill="#f5f5f4" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+              <line x1="57" y1="95" x2="143" y2="95" stroke="#d97706" stroke-width="2.5" stroke-dasharray="4 3"/>
+              <text x="100" y="88" fill="#d97706" font-size="11" font-weight="bold" text-anchor="middle">SISA (Tórax)</text>
+              <line x1="75" y1="48" x2="75" y2="180" stroke="#059669" stroke-width="2.5" stroke-dasharray="4 3"/>
+              <text x="82" y="145" fill="#059669" font-size="11" font-weight="bold">LARGO</text>
+            </svg>
+          </div>
+          <p class="text-[11px] text-stone-600">• <strong>Sisa:</strong> Axila a axila. • <strong>Largo:</strong> Cuello/hombro al ruedo.</p>
+        </div>
+
+        <div class="bg-stone-50 p-4 rounded-2xl border border-stone-200 space-y-3">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-stone-900 flex items-center gap-2">
+            <i data-lucide="scissors" class="w-4 h-4 text-amber-600"></i> Jeans, Shorts y Joggers
+          </h3>
+          <div class="bg-white p-3 rounded-xl border border-stone-200 flex items-center justify-center">
+            <svg class="w-36 h-36 text-stone-800" viewBox="0 0 200 200" fill="none" stroke="currentColor">
+              <path d="M60 35 L140 35 L148 180 L115 180 L100 85 L85 180 L52 180 Z" fill="#f5f5f4" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+              <line x1="60" y1="35" x2="140" y2="35" stroke="#d97706" stroke-width="2.5" stroke-dasharray="4 3"/>
+              <text x="100" y="27" fill="#d97706" font-size="11" font-weight="bold" text-anchor="middle">CINTURA</text>
+              <line x1="145" y1="35" x2="145" y2="180" stroke="#059669" stroke-width="2.5" stroke-dasharray="4 3"/>
+              <text x="150" y="115" fill="#059669" font-size="11" font-weight="bold">LARGO</text>
+            </svg>
+          </div>
+          <p class="text-[11px] text-stone-600">• <strong>Cintura:</strong> Ancho plano abotonado. • <strong>Largo:</strong> Cintura a botamanga.</p>
+        </div>
+      </div>
+
+      <button onclick="closeSizeGuideModal()" class="w-full py-3 bg-stone-900 hover:bg-stone-800 text-white font-bold rounded-xl text-xs transition">
+        Cerrar
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL DETALLE / FOTOS -->
+  <div id="detailModal" class="fixed inset-0 z-50 bg-stone-950/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl flex flex-col overflow-hidden relative">
+      <button onclick="closeDetailModal()" class="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-stone-900/60 text-white flex items-center justify-center hover:bg-stone-900 transition">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="p-6 md:p-8 space-y-5">
+        <div class="relative bg-stone-100 rounded-2xl overflow-hidden aspect-[4/3] flex items-center justify-center border border-stone-200">
+          <img id="modalMainImg" src="" alt="Prenda" class="w-full h-full object-contain">
+          <button id="modalPrevBtn" onclick="changeModalPhoto(-1)" class="absolute left-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 hover:bg-white text-stone-900 shadow flex items-center justify-center">
+            <i data-lucide="chevron-left" class="w-5 h-5"></i>
+          </button>
+          <button id="modalNextBtn" onclick="changeModalPhoto(1)" class="absolute right-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 hover:bg-white text-stone-900 shadow flex items-center justify-center">
+            <i data-lucide="chevron-right" class="w-5 h-5"></i>
+          </button>
+          <span id="modalImgCounter" class="absolute bottom-3 right-3 text-[11px] font-bold px-2 py-1 bg-stone-900/70 text-white rounded-lg backdrop-blur">1 / 1</span>
+        </div>
+
+        <div id="modalThumbs" class="flex gap-2 overflow-x-auto pb-1"></div>
+
+        <div class="space-y-4">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <div class="flex items-center gap-2 mb-1 flex-wrap">
+                <span id="modalBadgeCode" class="text-xs font-mono font-bold text-stone-500 uppercase tracking-wider">#COD</span>
+                <span id="modalBadgeCategory" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-stone-100 text-stone-700">Categoría</span>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-200">Cambio dentro de 48 hs</span>
+              </div>
+              <h2 id="modalTitle" class="text-xl md:text-2xl font-black text-stone-900 leading-tight">Nombre Prenda</h2>
+            </div>
+            <div class="text-right">
+              <span id="modalOriginalPrice" class="text-xs text-stone-400 line-through block font-medium">$0</span>
+              <span id="modalPrice" class="text-2xl font-black text-emerald-600 block leading-tight">$0</span>
+            </div>
+          </div>
+
+          <!-- DESCRIPCIÓN / FALLAS / OBSERVACIONES (IDEA 4) -->
+          <div id="modalDescriptionBox" class="hidden bg-amber-50/70 p-3 rounded-2xl border border-amber-200/80 text-xs text-amber-950 flex items-start gap-2">
+            <i data-lucide="info" class="w-4 h-4 text-amber-700 shrink-0 mt-0.5"></i>
+            <div>
+              <strong class="block text-[11px] uppercase tracking-wider text-amber-900 font-bold mb-0.5">Detalles de la prenda:</strong>
+              <p id="modalDescriptionText" class="leading-relaxed"></p>
+            </div>
+          </div>
+
+          <!-- Selector de Talle en Modal -->
+          <div class="bg-stone-50 p-4 rounded-2xl border border-stone-200/70 space-y-3 text-sm">
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="text-xs text-stone-500 font-semibold">Talles disponibles:</span>
+                <span id="modalStockHint" class="text-[11px] text-amber-700 font-medium"></span>
+              </div>
+              <div id="modalSizeButtons" class="flex flex-wrap gap-2"></div>
+            </div>
+
+            <!-- Medidas (Ocultable si está en blanco - IDEA 3) -->
+            <div id="modalMeasurementsWrapper" class="pt-2 border-t border-stone-200/60">
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-xs text-stone-500 flex items-center gap-1 font-semibold">
+                  <i data-lucide="ruler" class="w-3.5 h-3.5 text-amber-600"></i> Medidas sobre prenda plana:
+                </span>
+                <button onclick="openSizeGuideModal()" class="text-[11px] text-amber-700 hover:text-amber-800 font-bold underline">
+                  Ver cómo medimos
+                </button>
+              </div>
+              <div id="modalMeasurements" class="text-stone-800 font-medium text-xs bg-white p-2.5 rounded-xl border border-stone-200"></div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3 pt-2">
+            <button id="modalAddBtn" class="w-full py-3 bg-stone-900 hover:bg-stone-800 text-white rounded-xl font-bold flex items-center justify-center gap-2 transition shadow-md">
+              <i data-lucide="plus-circle" class="w-5 h-5"></i>
+              <span>Agregar al Pedido</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GAVETA CARRITO -->
+  <div id="cartOverlay" class="fixed inset-0 z-50 bg-stone-950/60 backdrop-blur-sm hidden transition-opacity" onclick="toggleCart(false)"></div>
+  <div id="cartDrawer" class="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-white shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300 ease-in-out">
+    <div class="p-4 sm:p-5 border-b border-stone-200 flex items-center justify-between bg-stone-900 text-white">
+      <div class="flex items-center gap-2.5">
+        <i data-lucide="shopping-bag" class="w-5 h-5 text-amber-400"></i>
+        <div>
+          <h3 class="font-bold text-base leading-tight">Tu Pedido</h3>
+          <p class="text-[11px] text-stone-400">Concordia, Entre Ríos</p>
+        </div>
+      </div>
+      <button onclick="toggleCart(false)" class="text-stone-400 hover:text-white p-1 rounded-lg">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+    </div>
+
+    <div id="cartItemsList" class="flex-1 overflow-y-auto p-4 space-y-3"></div>
+
+    <div class="p-4 sm:p-5 border-t border-stone-200 bg-stone-50 space-y-4">
+      <div class="space-y-1.5 text-sm">
+        <div class="flex justify-between text-stone-500">
+          <span>Subtotal estimado:</span>
+          <span id="cartSubtotal" class="font-semibold text-stone-800">$0</span>
+        </div>
+        <div class="flex justify-between text-emerald-600 text-xs font-semibold">
+          <span>Ahorro:</span>
+          <span id="cartSavings">-$0</span>
+        </div>
+        <div class="flex justify-between text-base font-black text-stone-900 pt-2 border-t border-stone-200">
+          <span>Total prendas:</span>
+          <span id="cartTotal" class="text-lg text-emerald-700">$0</span>
+        </div>
+      </div>
+
+      <div class="space-y-2.5 pt-2">
+        <div>
+          <label class="text-[11px] font-bold text-stone-600 block mb-1 uppercase tracking-wider">Tu Nombre y Apellido *</label>
+          <input type="text" id="buyerName" placeholder="Ej: Juan Pérez" class="w-full px-3 py-2 text-xs bg-white border border-stone-300 rounded-xl focus:ring-2 focus:ring-stone-900 focus:outline-none">
+        </div>
+        
+        <div class="grid grid-cols-2 gap-2 text-xs">
+          <div>
+            <label class="text-[11px] font-bold text-stone-600 block mb-1 uppercase tracking-wider">Entrega</label>
+            <select id="buyerDelivery" class="w-full px-2.5 py-2 bg-white border border-stone-300 rounded-xl focus:outline-none">
+              <option value="Retiro en Concordia">Retiro en Concordia</option>
+              <option value="Envío en Concordia (A cotizar por WhatsApp)">Envío en Concordia (A cotizar)</option>
+              <option value="Envío fuera de Concordia (A cotizar por WhatsApp)">Envío a otra localidad (A cotizar)</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-[11px] font-bold text-stone-600 block mb-1 uppercase tracking-wider">Medio de Pago</label>
+            <select id="buyerPayment" class="w-full px-2.5 py-2 bg-white border border-stone-300 rounded-xl focus:outline-none">
+              <option value="Transferencia">Transferencia</option>
+              <option value="Efectivo">Efectivo</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-amber-50 p-2.5 rounded-xl border border-amber-200 flex items-start gap-2 text-[11px] text-amber-900 leading-tight">
+        <i data-lucide="info" class="w-4 h-4 shrink-0 text-amber-600 mt-0.5"></i>
+        <span>Cambios dentro de las <strong>48 hs</strong> sin excepción coordinando por WhatsApp. Envío a cotizar.</span>
+      </div>
+
+      <button 
+        onclick="sendWhatsAppOrder()" 
+        id="sendOrderBtn" 
+        class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-500 active:scale-[0.98] text-white rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg transition text-sm disabled:opacity-50 disabled:cursor-not-allowed">
+        <i data-lucide="message-circle" class="w-5 h-5"></i>
+        <span>Enviar Pedido por WhatsApp</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- BOTÓN FLOTANTE (Posicionado a la izquierda para no tapar Netlify) -->
+  <aside aria-label="Contacto rápido" class="fixed bottom-5 left-5 z-40">
+    <button 
+      onclick="openDirectWhatsAppInquiry()" 
+      class="group flex items-center gap-2.5 bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-3 rounded-full shadow-2xl transition transform hover:scale-105 active:scale-95 border-2 border-white">
+      <i data-lucide="message-circle" class="w-6 h-6"></i>
+      <span class="text-xs font-bold hidden sm:inline">¿Dudas? Consultanos por WhatsApp</span>
+    </button>
+  </aside>
+
+  <!-- PIE DE PÁGINA -->
+  <footer class="bg-stone-900 text-stone-400 text-xs py-8 border-t border-stone-800 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 text-center space-y-2">
+      <p class="font-bold text-stone-300">Catálogo de Saldos & Liquidación • Concordia, Entre Ríos</p>
+      <p class="text-[11px] text-stone-500">Prendas con medidas detalladas en publicación. Cambios dentro de las 48 hs. Envíos a cotizar.</p>
+    </div>
+  </footer>
+
+  <!-- ================= JAVASCRIPT ================= -->
+  <script>
+    const STORE_WHATSAPP = "5493454287140";
+    const STORE_CITY = "Concordia, Entre Ríos";
+    const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRkEooRYSmyuC8XOkLxhZ9_6r8KT910RtZj2mjuoqgv8o2NE-psTdixkznJ5vsZXn3AiCh-k9lojXK8/pub?gid=0&single=true&output=csv";
+    const PLACEHOLDER_IMG = "https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=600";
+
+    // ORDEN OFICIAL DE TALLES (Estandarización - IDEA 2)
+    const SIZE_ORDER = [
+      "XS", "S", "M", "L", "XL", "XXL", "2XL",
+      "36", "38", "40", "42", "44", "46", "48", "50",
+      "3XL", "4XL", "5XL", "6XL", "7XL", "ÚNICO"
+    ];
+
+    let inventory = [];
+    let cart = [];
+    let activeCategory = "all";
+    let activeSize = "all";
+    let activeSizeGroup = "all";
+    let modalCurrentProduct = null;
+    let modalSelectedSize = null;
+    let modalPhotoIndex = 0;
+
+    function formatPhotoUrl(url) {
+      if (!url) return "";
+      let clean = url.trim();
+      const driveMatch = clean.match(/\/d\/([a-zA-Z0-9_-]+)/) || clean.match(/id=([a-zA-Z0-9_-]+)/);
+      if (driveMatch && driveMatch[1]) {
+        return `https://drive.google.com/thumbnail?id=${driveMatch[1]}&sz=w1000`;
+      }
+      return clean;
+    }
+
+    function cleanPrice(val) {
+      if (!val) return 0;
+      if (typeof val === 'number') return val;
+      let str = val.toString().replace(/[$\s]/g, '');
+      if (str.includes('.') && !str.includes(',')) {
+        str = str.replace(/\./g, '');
+      } else if (str.includes('.') && str.includes(',')) {
+        str = str.replace(/\./g, '').replace(',', '.');
+      } else if (str.includes(',')) {
+        str = str.replace(',', '.');
+      }
+      return parseFloat(str) || 0;
+    }
+
+    function parseCSVLine(text) {
+      let result = [];
+      let cur = '';
+      let inQuotes = false;
+      for (let i = 0; i < text.length; i++) {
+        let c = text[i];
+        if (c === '"') {
+          inQuotes = !inQuotes;
+        } else if (c === ',' && !inQuotes) {
+          result.push(cur.trim());
+          cur = '';
+        } else {
+          cur += c;
+        }
+      }
+      result.push(cur.trim());
+      return result;
+    }
+
+    // Parsea talles soportando precios diferenciados por talle (IDEA 1) y stock (ej: "S, M:2, 5XL($33000)")
+    function parseSizeInventory(rawTalle, defaultPrice) {
+      if (!rawTalle) return { 'ÚNICO': { stock: 1, price: defaultPrice } };
+      const map = {};
+      const parts = rawTalle.split(/[,/]/).map(p => p.trim()).filter(Boolean);
+
+      parts.forEach(part => {
+        let clean = part.toUpperCase();
+        let customPrice = defaultPrice;
+
+        // Detectar si el talle tiene un precio especial entre paréntesis: 5XL($33000)
+        const priceMatch = clean.match(/\(\$?([0-9\.]+)\)/);
+        if (priceMatch) {
+          customPrice = cleanPrice(priceMatch[1]);
+          clean = clean.replace(/\(\$?([0-9\.]+)\)/, '').trim();
+        }
+
+        let qty = 1;
+        if (clean.includes(':')) {
+          const [sz, q] = clean.split(':');
+          clean = sz.trim();
+          qty = parseInt(q.trim()) || 1;
+        }
+
+        if (!map[clean]) {
+          map[clean] = { stock: qty, price: customPrice };
+        } else {
+          map[clean].stock += qty;
+        }
+      });
+
+      return Object.keys(map).length > 0 ? map : { 'ÚNICO': { stock: 1, price: defaultPrice } };
+    }
+
+    // Comprueba si una medida es válida o debe omitirse (IDEA 3)
+    function isValidMeasurement(text) {
+      if (!text) return false;
+      const clean = text.trim().toLowerCase();
+      if (clean === "" || clean === "-" || clean === "pendiente" || clean === "talles reales" || clean === "estándar" || clean === "estandar") {
+        return false;
+      }
+      return true;
+    }
+
+    async function loadData() {
+      try {
+        const antiCache = GOOGLE_SHEET_CSV_URL + "&_t=" + Date.now();
+        const res = await fetch(antiCache);
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        const text = await res.text();
+        const lines = text.split(/\r?\n/).filter(l => l.trim().length > 0);
+        if (lines.length < 2) return;
+
+        const headers = parseCSVLine(lines[0]).map(h => h.toLowerCase().replace(/[^a-z0-9_]/g, ''));
+        const items = [];
+
+        for (let i = 1; i < lines.length; i++) {
+          const row = parseCSVLine(lines[i]);
+          if (row.length === 0) continue;
+
+          let obj = {};
+          headers.forEach((h, idx) => {
+            obj[h] = row[idx] ? row[idx].replace(/^"|"$/g, '') : '';
+          });
+
+          const stockVal = obj.stock !== undefined && obj.stock !== '' ? parseInt(obj.stock) : 1;
+          if (stockVal > 0) {
+            let photos = [];
+            let rawP = obj.fotos || obj.foto || '';
+            if (rawP && rawP.toLowerCase() !== 'pendiente') {
+              photos = rawP.split(',')
+                .map(p => formatPhotoUrl(p))
+                .filter(p => p.startsWith('http'));
+            }
+            if (photos.length === 0) photos = [PLACEHOLDER_IMG];
+
+            const basePrice = cleanPrice(obj.precio_oferta);
+            const sizeDataMap = parseSizeInventory(obj.talle, basePrice);
+
+            items.push({
+              id: obj.id || `PROD-${i}`,
+              nombre: obj.nombre || 'Prenda',
+              categoria: obj.categoria || 'Varios',
+              sizeDataMap: sizeDataMap,
+              talles: Object.keys(sizeDataMap),
+              color: obj.color || '-',
+              medidas: obj.medidas || '',
+              descripcion: obj.descripcion || '', // Columna opcional IDEA 4
+              precio_original: cleanPrice(obj.precio_original),
+              precio_oferta: basePrice,
+              stock: stockVal,
+              fotos: photos
+            });
+          }
+        }
+
+        if (items.length > 0) {
+          inventory = items;
+        }
+      } catch (err) {
+        console.warn("Fallo cargando CSV:", err);
+      } finally {
+        initFilters();
+        renderCatalog();
+        updateCartUI();
+      }
+    }
+
+    // Ordenamiento estandarizado inteligente de talles (IDEA 2)
+    function sortSizes(sizesArray) {
+      return [...sizesArray].sort((a, b) => {
+        const idxA = SIZE_ORDER.indexOf(a);
+        const idxB = SIZE_ORDER.indexOf(b);
+        if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+        if (idxA !== -1) return -1;
+        if (idxB !== -1) return 1;
+        return a.localeCompare(b);
+      });
+    }
+
+    function initFilters() {
+      // Categorías
+      const categories = ["all", ...new Set(inventory.map(i => i.categoria).filter(Boolean))];
+      const catContainer = document.getElementById("categoryFilters");
+      catContainer.innerHTML = categories.map(cat => `
+        <button onclick="setCategoryFilter('${cat}')" class="category-btn px-3 py-1.5 rounded-xl font-bold transition whitespace-nowrap ${cat === activeCategory ? 'bg-stone-900 text-white' : 'bg-stone-100 text-stone-600 hover:bg-stone-200'}">
+          ${cat === 'all' ? 'Todos' : cat}
+        </button>
+      `).join("");
+
+      // Talles
+      renderSizeButtons();
+    }
+
+    function setSizeGroup(grp) {
+      activeSizeGroup = grp;
+      ["all", "letras", "numeros", "especiales"].forEach(g => {
+        const btn = document.getElementById(`grp-${g}`);
+        if (btn) {
+          btn.className = (g === grp) 
+            ? "px-2.5 py-1 rounded-lg font-bold transition bg-stone-900 text-white" 
+            : "px-2.5 py-1 rounded-lg font-bold transition text-stone-600 hover:text-stone-900";
+        }
+      });
+      renderSizeButtons();
+    }
+
+    function renderSizeButtons() {
+      const allSizes = new Set();
+      inventory.forEach(i => i.talles.forEach(sz => allSizes.add(sz)));
+      let sorted = sortSizes(Array.from(allSizes));
+
+      // Filtrado por grupo seleccionado
+      if (activeSizeGroup === 'letras') {
+        sorted = sorted.filter(s => ["XS", "S", "M", "L", "XL", "XXL", "2XL"].includes(s));
+      } else if (activeSizeGroup === 'numeros') {
+        sorted = sorted.filter(s => /^[0-9]+$/.test(s));
+      } else if (activeSizeGroup === 'especiales') {
+        sorted = sorted.filter(s => ["3XL", "4XL", "5XL", "6XL", "7XL"].includes(s));
+      }
+
+      const sizeContainer = document.getElementById("sizeFilters");
+      let html = `
+        <button onclick="setSizeFilter('all')" class="size-btn px-2.5 py-1 rounded-lg font-bold border transition text-xs whitespace-nowrap ${activeSize === 'all' ? 'bg-amber-500 border-amber-500 text-stone-950' : 'bg-white border-stone-200 text-stone-600 hover:border-stone-400'}">
+          Todos los talles
+        </button>
+      `;
+
+      html += sorted.map(sz => `
+        <button onclick="setSizeFilter('${sz}')" class="size-btn px-2.5 py-1 rounded-lg font-bold border transition text-xs whitespace-nowrap ${activeSize === sz ? 'bg-amber-500 border-amber-500 text-stone-950' : 'bg-white border-stone-200 text-stone-600 hover:border-stone-400'}">
+          Talle ${sz}
+        </button>
+      `).join("");
+
+      sizeContainer.innerHTML = html;
+
+      const indicator = document.getElementById("activeSizeIndicator");
+      if (activeSize !== "all") {
+        indicator.textContent = `Talle ${activeSize}`;
+        indicator.classList.remove("hidden");
+      } else {
+        indicator.classList.add("hidden");
+      }
+    }
+
+    function setCategoryFilter(cat) {
+      activeCategory = cat;
+      initFilters();
+      applyFilters();
+    }
+
+    function setSizeFilter(sz) {
+      activeSize = sz;
+      renderSizeButtons();
+      applyFilters();
+    }
+
+    function resetFilters() {
+      document.getElementById("searchInput").value = "";
+      activeCategory = "all";
+      activeSize = "all";
+      activeSizeGroup = "all";
+      initFilters();
+      renderCatalog(inventory);
+    }
+
+    function applyFilters() {
+      const q = document.getElementById("searchInput").value.toLowerCase().trim();
+      const filtered = inventory.filter(p => {
+        const matchCat = (activeCategory === "all" || p.categoria.toLowerCase() === activeCategory.toLowerCase());
+        const matchSize = (activeSize === "all" || p.talles.includes(activeSize));
+        const matchQuery = !q || p.nombre.toLowerCase().includes(q) || p.id.toLowerCase().includes(q) || p.color.toLowerCase().includes(q) || p.categoria.toLowerCase().includes(q);
+        return matchCat && matchSize && matchQuery;
+      });
+      renderCatalog(filtered);
+    }
+
+    function renderCatalog(items = inventory) {
+      const grid = document.getElementById("productGrid");
+      const empty = document.getElementById("emptyState");
+      document.getElementById("productCount").textContent = items.length;
+
+      if (items.length === 0) {
+        grid.innerHTML = "";
+        empty.classList.remove("hidden");
+        return;
+      }
+      empty.classList.add("hidden");
+
+      grid.innerHTML = items.map(p => {
+        const discount = (p.precio_original > p.precio_oferta && p.precio_oferta > 0)
+          ? Math.round(((p.precio_original - p.precio_oferta) / p.precio_original) * 100) 
+          : 0;
+
+        const sortedTalles = sortSizes(p.talles);
+        const sizeLabel = sortedTalles.length === 1 ? `TALLE ${sortedTalles[0]}` : `TALLES: ${sortedTalles.join(' · ')}`;
+        const hasValidMeasurements = isValidMeasurement(p.medidas);
+
+        return `
+          <div class="bg-white rounded-2xl border border-stone-200 overflow-hidden shadow-sm hover:shadow-md transition flex flex-col group">
+            <div class="relative bg-stone-100 aspect-[4/3] overflow-hidden cursor-pointer" onclick="openDetailModal('${p.id}')">
+              <img src="${p.fotos[0]}" alt="${p.nombre}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='${PLACEHOLDER_IMG}'">
+              
+              <span class="absolute top-2.5 left-2.5 bg-stone-950/85 backdrop-blur text-amber-400 text-xs font-black px-2.5 py-1 rounded-lg tracking-wider shadow">
+                ${sizeLabel}
+              </span>
+
+              ${discount > 0 ? `
+                <span class="absolute top-2.5 right-2.5 bg-red-600 text-white text-[11px] font-black px-2 py-0.5 rounded-md shadow uppercase">
+                  -${discount}%
+                </span>
+              ` : ''}
+
+              ${p.fotos.length > 1 ? `
+                <span class="absolute bottom-2 right-2 bg-stone-900/70 text-white text-[10px] font-bold px-1.5 py-0.5 rounded backdrop-blur flex items-center gap-1">
+                  <i data-lucide="camera" class="w-3 h-3"></i> ${p.fotos.length}
+                </span>
+              ` : ''}
+            </div>
+
+            <div class="p-4 flex-1 flex flex-col justify-between space-y-3">
+              <div>
+                <div class="flex items-center justify-between text-[11px] text-stone-400 font-mono mb-0.5">
+                  <span>#${p.id}</span>
+                  <span class="text-stone-500 font-semibold">${p.color}</span>
+                </div>
+                <h3 onclick="openDetailModal('${p.id}')" class="font-bold text-stone-900 text-sm hover:text-amber-600 cursor-pointer line-clamp-1">
+                  ${p.nombre}
+                </h3>
+                
+                <!-- MEDIDAS: Solo se muestra si tiene datos reales (IDEA 3) -->
+                ${hasValidMeasurements ? `
+                  <p class="text-[11px] text-stone-600 mt-1 flex items-center gap-1 bg-stone-50 p-1.5 rounded-lg border border-stone-200">
+                    <i data-lucide="ruler" class="w-3 h-3 text-amber-600 shrink-0"></i>
+                    <span class="truncate">${p.medidas}</span>
+                  </p>
+                ` : ''}
+
+                <!-- DESCRIPCIÓN CORTA SI EXISTE (IDEA 4) -->
+                ${p.descripcion ? `
+                  <p class="text-[10px] text-amber-800 font-medium mt-1 line-clamp-1 bg-amber-50/70 px-2 py-0.5 rounded border border-amber-200/50">
+                    • ${p.descripcion}
+                  </p>
+                ` : ''}
+              </div>
+
+              <div class="pt-2 border-t border-stone-100">
+                <div class="flex items-baseline gap-2 mb-2">
+                  <span class="text-lg font-black text-stone-950">$${p.precio_oferta.toLocaleString('es-AR')}</span>
+                  ${p.precio_original > p.precio_oferta ? `
+                    <span class="text-xs text-stone-400 line-through font-medium">$${p.precio_original.toLocaleString('es-AR')}</span>
+                  ` : ''}
+                </div>
+
+                <button 
+                  onclick="openDetailModal('${p.id}')" 
+                  class="w-full py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 bg-stone-900 hover:bg-stone-800 text-white shadow-sm">
+                  <i data-lucide="check" class="w-3.5 h-3.5"></i>
+                  <span>Ver y Elegir Talle</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      lucide.createIcons();
+    }
+
+    function openDetailModal(productId) {
+      const prod = inventory.find(p => p.id === productId);
+      if (!prod) return;
+      modalCurrentProduct = prod;
+      modalPhotoIndex = 0;
+      modalSelectedSize = prod.talles[0];
+
+      document.getElementById("modalBadgeCode").textContent = `#${prod.id}`;
+      document.getElementById("modalBadgeCategory").textContent = prod.categoria;
+      document.getElementById("modalTitle").textContent = prod.nombre;
+
+      // Descripción / Falla opcional (IDEA 4)
+      const descBox = document.getElementById("modalDescriptionBox");
+      const descText = document.getElementById("modalDescriptionText");
+      if (prod.descripcion && prod.descripcion.trim().length > 0) {
+        descText.textContent = prod.descripcion;
+        descBox.classList.remove("hidden");
+      } else {
+        descBox.classList.add("hidden");
+      }
+
+      // Ocultar pastilla de medidas si está vacía (IDEA 3)
+      const measWrapper = document.getElementById("modalMeasurementsWrapper");
+      if (isValidMeasurement(prod.medidas)) {
+        measWrapper.classList.remove("hidden");
+      } else {
+        measWrapper.classList.add("hidden");
+      }
+
+      renderModalSizeButtons();
+      updateModalPhoto();
+      updateModalMeasurements();
+      updateModalAddButton();
+
+      document.getElementById("detailModal").classList.remove("hidden");
+      lucide.createIcons();
+    }
+
+    function renderModalSizeButtons() {
+      const container = document.getElementById("modalSizeButtons");
+      const hint = document.getElementById("modalStockHint");
+      const sizeInfo = modalCurrentProduct.sizeDataMap[modalSelectedSize] || { stock: 1, price: modalCurrentProduct.precio_oferta };
+      
+      hint.textContent = sizeInfo.stock > 1 ? `(${sizeInfo.stock} disponibles)` : `(Última unidad disponible)`;
+
+      // Actualizar precio dinámico si el talle tiene precio especial (IDEA 1)
+      const currentPrice = sizeInfo.price || modalCurrentProduct.precio_oferta;
+      document.getElementById("modalPrice").textContent = `$${currentPrice.toLocaleString('es-AR')}`;
+
+      const origEl = document.getElementById("modalOriginalPrice");
+      if (modalCurrentProduct.precio_original > currentPrice) {
+        origEl.textContent = `$${modalCurrentProduct.precio_original.toLocaleString('es-AR')}`;
+        origEl.classList.remove("hidden");
+      } else {
+        origEl.classList.add("hidden");
+      }
+
+      const sortedTalles = sortSizes(modalCurrentProduct.talles);
+      container.innerHTML = sortedTalles.map(sz => {
+        const itemInfo = modalCurrentProduct.sizeDataMap[sz] || { stock: 1, price: modalCurrentProduct.precio_oferta };
+        const isSelected = modalSelectedSize === sz;
+        return `
+          <button onclick="selectModalSize('${sz}')" class="px-3.5 py-1.5 rounded-xl font-bold text-xs border transition flex items-center gap-1.5 ${isSelected ? 'bg-amber-500 border-amber-500 text-stone-950 shadow-sm scale-105' : 'bg-white border-stone-200 text-stone-700 hover:border-stone-400'}">
+            <span>Talle ${sz}</span>
+            ${itemInfo.price !== modalCurrentProduct.precio_oferta ? `<span class="text-[10px] text-emerald-800 font-extrabold bg-emerald-100 px-1 rounded">$${itemInfo.price.toLocaleString('es-AR')}</span>` : ''}
+            ${itemInfo.stock > 1 ? `<span class="text-[10px] opacity-75 font-semibold">(${itemInfo.stock})</span>` : ''}
+          </button>
+        `;
+      }).join("");
+    }
+
+    function selectModalSize(sz) {
+      modalSelectedSize = sz;
+      renderModalSizeButtons();
+      updateModalAddButton();
+      updateModalMeasurements();
+    }
+
+    function updateModalMeasurements() {
+      const p = modalCurrentProduct;
+      const el = document.getElementById("modalMeasurements");
+      if (!isValidMeasurement(p.medidas)) return;
+
+      if (p.medidas.includes("/") || p.medidas.includes("\n")) {
+        const parts = p.medidas.split(/[\/\n]/).map(s => s.trim()).filter(Boolean);
+        const match = parts.find(part => {
+          const prefix = part.split(/[:\-]/)[0].trim().toUpperCase();
+          return prefix === modalSelectedSize;
+        });
+
+        if (match) {
+          const details = match.replace(/^[^:\-]+[:\-]\s*/, '');
+          el.innerHTML = `
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 bg-amber-100 text-amber-900 rounded font-bold text-[11px]">Talle ${modalSelectedSize}</span>
+              <span class="text-stone-800 font-semibold">${details}</span>
+            </div>
+          `;
+          return;
+        }
+      }
+
+      el.textContent = p.medidas;
+    }
+
+    function updateModalAddButton() {
+      const modalAddBtn = document.getElementById("modalAddBtn");
+      const inCart = cart.some(c => c.id === modalCurrentProduct.id && c.talleElegido === modalSelectedSize);
+
+      modalAddBtn.innerHTML = inCart 
+        ? `<i data-lucide="trash-2" class="w-5 h-5"></i> <span>Quitar Talle ${modalSelectedSize} del Pedido</span>` 
+        : `<i data-lucide="plus-circle" class="w-5 h-5"></i> <span>Agregar Talle ${modalSelectedSize} al Pedido</span>`;
+
+      modalAddBtn.className = inCart 
+        ? "w-full py-3 bg-red-50 text-red-700 hover:bg-red-100 rounded-xl font-bold flex items-center justify-center gap-2 transition"
+        : "w-full py-3 bg-stone-900 hover:bg-stone-800 text-white rounded-xl font-bold flex items-center justify-center gap-2 transition shadow-md";
+
+      modalAddBtn.onclick = () => {
+        toggleCartItem(modalCurrentProduct.id, modalSelectedSize);
+        updateModalAddButton();
+      };
+      lucide.createIcons();
+    }
+
+    function closeDetailModal() {
+      document.getElementById("detailModal").classList.add("hidden");
+    }
+
+    function openSizeGuideModal() {
+      document.getElementById("sizeGuideModal").classList.remove("hidden");
+      lucide.createIcons();
+    }
+
+    function closeSizeGuideModal() {
+      document.getElementById("sizeGuideModal").classList.add("hidden");
+    }
+
+    function updateModalPhoto() {
+      const photos = modalCurrentProduct.fotos;
+      const mainImg = document.getElementById("modalMainImg");
+      const counter = document.getElementById("modalImgCounter");
+      const prevBtn = document.getElementById("modalPrevBtn");
+      const nextBtn = document.getElementById("modalNextBtn");
+      const thumbsContainer = document.getElementById("modalThumbs");
+
+      mainImg.src = photos[modalPhotoIndex];
+      mainImg.onerror = () => { mainImg.src = PLACEHOLDER_IMG; };
+      counter.textContent = `${modalPhotoIndex + 1} / ${photos.length}`;
+
+      if (photos.length <= 1) {
+        prevBtn.classList.add("hidden");
+        nextBtn.classList.add("hidden");
+        counter.classList.add("hidden");
+        thumbsContainer.classList.add("hidden");
+      } else {
+        prevBtn.classList.remove("hidden");
+        nextBtn.classList.remove("hidden");
+        counter.classList.remove("hidden");
+        thumbsContainer.classList.remove("hidden");
+
+        thumbsContainer.innerHTML = photos.map((url, idx) => `
+          <button onclick="setModalPhoto(${idx})" class="w-14 h-14 rounded-xl border-2 overflow-hidden shrink-0 transition ${idx === modalPhotoIndex ? 'border-amber-500 scale-105' : 'border-stone-200 opacity-60'}">
+            <img src="${url}" class="w-full h-full object-cover" onerror="this.src='${PLACEHOLDER_IMG}'">
+          </button>
+        `).join("");
+      }
+    }
+
+    function changeModalPhoto(dir) {
+      const total = modalCurrentProduct.fotos.length;
+      modalPhotoIndex = (modalPhotoIndex + dir + total) % total;
+      updateModalPhoto();
+    }
+
+    function setModalPhoto(idx) {
+      modalPhotoIndex = idx;
+      updateModalPhoto();
+    }
+
+    function toggleCartItem(productId, sizeChosen) {
+      const prod = inventory.find(p => p.id === productId);
+      if (!prod) return;
+
+      const idx = cart.findIndex(c => c.id === productId && c.talleElegido === sizeChosen);
+      if (idx > -1) {
+        cart.splice(idx, 1);
+      } else {
+        const sizeInfo = prod.sizeDataMap[sizeChosen] || { price: prod.precio_oferta };
+        cart.push({
+          ...prod,
+          talleElegido: sizeChosen,
+          precioFinal: sizeInfo.price || prod.precio_oferta
+        });
+      }
+      updateCartUI();
+    }
+
+    function toggleCart(show) {
+      const drawer = document.getElementById("cartDrawer");
+      const overlay = document.getElementById("cartOverlay");
+      if (show) {
+        overlay.classList.remove("hidden");
+        drawer.classList.remove("translate-x-full");
+      } else {
+        drawer.classList.add("translate-x-full");
+        setTimeout(() => overlay.classList.add("hidden"), 200);
+      }
+    }
+
+    function updateCartUI() {
+      document.getElementById("cartCountBadge").textContent = cart.length;
+      const list = document.getElementById("cartItemsList");
+      const sendBtn = document.getElementById("sendOrderBtn");
+
+      if (cart.length === 0) {
+        list.innerHTML = `
+          <div class="text-center py-12 text-stone-400">
+            <i data-lucide="shopping-bag" class="w-12 h-12 mx-auto mb-2 opacity-30"></i>
+            <p class="text-sm font-semibold">Tu pedido está vacío</p>
+            <p class="text-xs text-stone-400 mt-1">Elegí las prendas y talles que quieras reservar.</p>
+          </div>
+        `;
+        document.getElementById("cartSubtotal").textContent = "$0";
+        document.getElementById("cartSavings").textContent = "-$0";
+        document.getElementById("cartTotal").textContent = "$0";
+        sendBtn.disabled = true;
+        lucide.createIcons();
+        return;
+      }
+
+      sendBtn.disabled = false;
+      let subtotal = 0;
+      let totalOferta = 0;
+
+      list.innerHTML = cart.map(item => {
+        const priceToUse = item.precioFinal || item.precio_oferta;
+        subtotal += item.precio_original || priceToUse;
+        totalOferta += priceToUse;
+
+        return `
+          <div class="flex items-center gap-3 bg-stone-50 p-2.5 rounded-xl border border-stone-200">
+            <img src="${item.fotos[0]}" class="w-14 h-14 rounded-lg object-cover bg-white shrink-0" onerror="this.src='${PLACEHOLDER_IMG}'">
+            <div class="flex-1 min-w-0">
+              <h4 class="text-xs font-bold text-stone-900 truncate">${item.nombre}</h4>
+              <p class="text-[11px] text-stone-500">Talle elegido: <strong class="text-amber-700 font-bold">${item.talleElegido}</strong> · ${item.color}</p>
+              <span class="text-xs font-black text-stone-900">$${priceToUse.toLocaleString('es-AR')}</span>
+            </div>
+            <button onclick="toggleCartItem('${item.id}', '${item.talleElegido}')" class="text-stone-400 hover:text-red-600 p-1 rounded">
+              <i data-lucide="trash-2" class="w-4 h-4"></i>
+            </button>
+          </div>
+        `;
+      }).join("");
+
+      const ahorro = subtotal - totalOferta;
+      document.getElementById("cartSubtotal").textContent = `$${subtotal.toLocaleString('es-AR')}`;
+      document.getElementById("cartSavings").textContent = `-$${ahorro.toLocaleString('es-AR')}`;
+      document.getElementById("cartTotal").textContent = `$${totalOferta.toLocaleString('es-AR')}`;
+
+      lucide.createIcons();
+    }
+
+    function sendWhatsAppOrder() {
+      if (cart.length === 0) return;
+
+      const name = document.getElementById("buyerName").value.trim();
+      if (!name) {
+        alert("Por favor completá tu nombre para que podamos identificar tu pedido.");
+        document.getElementById("buyerName").focus();
+        return;
+      }
+
+      const delivery = document.getElementById("buyerDelivery").value;
+      const payment = document.getElementById("buyerPayment").value;
+      const total = cart.reduce((acc, curr) => acc + (curr.precioFinal || curr.precio_oferta), 0);
+
+      let msg = `*NUEVO PEDIDO DE COMPRA | SALDOS & OUTLET*\n`;
+      msg += `📍 *Ubicación:* ${STORE_CITY}\n`;
+      msg += `----------------------------------------\n`;
+      msg += `*Cliente:* ${name}\n`;
+      msg += `*Modalidad:* ${delivery}\n`;
+      msg += `*Medio de Pago:* ${payment}\n\n`;
+      msg += `*PRENDAS SELECCIONADAS:*\n`;
+
+      cart.forEach((item, idx) => {
+        const itemPrice = item.precioFinal || item.precio_oferta;
+        msg += `${idx + 1}. *${item.nombre}* [${item.id}]\n`;
+        msg += `   • Talle reservado: *${item.talleElegido}*\n`;
+        msg += `   • Color: ${item.color}\n`;
+        if (isValidMeasurement(item.medidas)) {
+          msg += `   • Medidas: ${item.medidas}\n`;
+        }
+        msg += `   • Precio: $${itemPrice.toLocaleString('es-AR')}\n`;
+      });
+
+      msg += `----------------------------------------\n`;
+      msg += `*TOTAL PRENDAS:* $${total.toLocaleString('es-AR')}\n`;
+      msg += `*(Envío a cotizar por este medio según zona)*\n\n`;
+      msg += `_Condiciones: Entiendo que las prendas son nuevas y tienen cambio dentro de las 48 hs sin excepción coordinando por WhatsApp. Solicito la reserva por 2 horas para coordinar el pago. Gracias!_`;
+
+      const encoded = encodeURIComponent(msg);
+      const url = `https://wa.me/${STORE_WHATSAPP}?text=${encoded}`;
+      window.open(url, "_blank");
+    }
+
+    function openDirectWhatsAppInquiry() {
+      const msg = encodeURIComponent(`¡Hola! Tengo una consulta sobre las prendas publicadas en la tienda de saldos de Concordia.`);
+      window.open(`https://wa.me/${STORE_WHATSAPP}?text=${msg}`, "_blank");
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      loadData();
+    });
+  </script>
+</body>
+</html>
