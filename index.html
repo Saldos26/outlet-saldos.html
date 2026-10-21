@@ -17,11 +17,11 @@
 </head>
 <body class="bg-stone-100 text-stone-900 min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-white pb-20 sm:pb-0">
 
-  <!-- BANNER POLÍTICAS -->
+  <!-- BANNER POLÍTICAS Y RESERVA -->
   <div class="bg-amber-500 text-stone-950 font-semibold px-4 py-2 text-center text-xs md:text-sm tracking-wide flex items-center justify-center gap-2 shadow-sm flex-wrap">
     <div class="flex items-center gap-1.5">
       <i data-lucide="map-pin" class="w-4 h-4 shrink-0"></i>
-      <span><strong>Concordia, Entre Ríos:</strong> Envíos a cotizar o retiro en local.</span>
+      <span><strong>Concordia, Entre Ríos:</strong> Envíos a cotizar por WhatsApp o retiro en local.</span>
     </div>
     <span class="hidden md:inline">•</span>
     <div class="flex items-center gap-1.5">
@@ -42,7 +42,7 @@
             SALDOS & OUTLET
             <span class="text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded-full bg-stone-800 text-amber-400 border border-stone-700">Concordia E.R.</span>
           </h1>
-          <p class="text-xs text-stone-400">Prendas seleccionadas a precio de liquidación</p>
+          <p class="text-xs text-stone-400">Prendas seleccionadas a precio de liquidación directa</p>
         </div>
       </div>
 
@@ -64,7 +64,7 @@
   <!-- CONTENIDO PRINCIPAL -->
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full flex-1">
     
-    <!-- BARRA DE BÚSQUEDA Y FILTROS ORDENADOS -->
+    <!-- BARRA DE BÚSQUEDA Y FILTROS -->
     <section class="bg-white p-4 sm:p-5 rounded-2xl shadow-sm border border-stone-200/80 mb-6 space-y-4">
       <div class="flex flex-col sm:flex-row gap-3">
         <div class="relative flex-1">
@@ -73,13 +73,13 @@
             type="text" 
             id="searchInput" 
             oninput="applyFilters()" 
-            placeholder="Buscar por prenda, código (#REM-115), color..." 
+            placeholder="Buscar por prenda, código (#REM-115, #CAM-1), color..." 
             class="w-full pl-11 pr-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-stone-900 focus:bg-white transition"
           >
         </div>
         <button onclick="openSizeGuideModal()" class="sm:hidden flex items-center justify-center gap-2 text-xs font-bold text-stone-700 bg-stone-100 hover:bg-stone-200 py-2.5 px-4 rounded-xl border border-stone-200">
           <i data-lucide="ruler" class="w-4 h-4 text-amber-600"></i>
-          <span>Guía de Medidas</span>
+          <span>Guía visual de medidas</span>
         </button>
       </div>
 
@@ -91,7 +91,7 @@
         <div id="categoryFilters" class="flex items-center gap-1.5 flex-nowrap"></div>
       </div>
 
-      <!-- Filtro por Talles Estandarizado y Plegable -->
+      <!-- Filtro por Talles Estandarizado -->
       <div class="pt-2 border-t border-stone-100 space-y-2">
         <div class="flex flex-wrap items-center justify-between gap-2">
           <div class="flex items-center gap-1.5 text-xs font-bold text-stone-700">
@@ -102,14 +102,14 @@
 
           <!-- Selector de Grupo de Talle -->
           <div class="flex items-center gap-1 text-[11px] bg-stone-100 p-1 rounded-xl">
-            <button onclick="setSizeGroup('all')" id="grp-all" class="px-2.5 py-1 rounded-lg font-bold transition bg-stone-900 text-white">Todos</button>
+            <button onclick="setSizeGroup('all')" id="grp-all" class="px-2.5 py-1 rounded-lg font-bold transition bg-stone-900 text-white shadow-sm">Todos</button>
             <button onclick="setSizeGroup('letras')" id="grp-letras" class="px-2.5 py-1 rounded-lg font-bold transition text-stone-600 hover:text-stone-900">Letras (S-XXL)</button>
             <button onclick="setSizeGroup('numeros')" id="grp-numeros" class="px-2.5 py-1 rounded-lg font-bold transition text-stone-600 hover:text-stone-900">Pantalón (38-48)</button>
             <button onclick="setSizeGroup('especiales')" id="grp-especiales" class="px-2.5 py-1 rounded-lg font-bold transition text-stone-600 hover:text-stone-900">Especiales (3XL+)</button>
           </div>
         </div>
 
-        <!-- Lista compacta de botones de talle ordenada -->
+        <!-- Botones de talle ordenados -->
         <div id="sizeFilters" class="flex items-center gap-1.5 overflow-x-auto pb-1 flex-nowrap sm:flex-wrap no-scrollbar"></div>
       </div>
     </section>
@@ -153,11 +153,12 @@
         </span>
         <h2 class="text-xl md:text-2xl font-black text-stone-900">¿Cómo medimos las prendas?</h2>
         <p class="text-xs text-stone-500 mt-1">
-          Medidas tomadas <strong>sobre la prenda extendida en mesa plana</strong> (no sobre el cuerpo). Compará con una prenda similar que te quede bien.
+          Medidas tomadas <strong>sobre la prenda extendida en mesa plana</strong> (no sobre el cuerpo). Te sugerimos comparar con una prenda tuya que te quede cómoda.
         </p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Prendas de arriba -->
         <div class="bg-stone-50 p-4 rounded-2xl border border-stone-200 space-y-3">
           <h3 class="text-xs font-bold uppercase tracking-wider text-stone-900 flex items-center gap-2">
             <i data-lucide="shirt" class="w-4 h-4 text-amber-600"></i> Remeras, Buzos y Camisacos
@@ -166,33 +167,55 @@
             <svg class="w-36 h-36 text-stone-800" viewBox="0 0 200 200" fill="none" stroke="currentColor">
               <path d="M60 40 L85 55 Q100 65 115 55 L140 40 L170 85 L145 95 L140 180 L60 180 L55 95 L30 85 Z" fill="#f5f5f4" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
               <line x1="57" y1="95" x2="143" y2="95" stroke="#d97706" stroke-width="2.5" stroke-dasharray="4 3"/>
+              <circle cx="57" cy="95" r="3" fill="#d97706"/>
+              <circle cx="143" cy="95" r="3" fill="#d97706"/>
               <text x="100" y="88" fill="#d97706" font-size="11" font-weight="bold" text-anchor="middle">SISA (Tórax)</text>
               <line x1="75" y1="48" x2="75" y2="180" stroke="#059669" stroke-width="2.5" stroke-dasharray="4 3"/>
+              <circle cx="75" cy="48" r="3" fill="#059669"/>
+              <circle cx="75" cy="180" r="3" fill="#059669"/>
               <text x="82" y="145" fill="#059669" font-size="11" font-weight="bold">LARGO</text>
             </svg>
           </div>
-          <p class="text-[11px] text-stone-600">• <strong>Sisa:</strong> Axila a axila. • <strong>Largo:</strong> Cuello/hombro al ruedo.</p>
+          <p class="text-[11px] text-stone-600">• <strong>Sisa:</strong> Axila a axila a la altura del tórax.<br>• <strong>Largo:</strong> Cuello/hombro al ruedo.</p>
         </div>
 
+        <!-- Prendas de abajo -->
         <div class="bg-stone-50 p-4 rounded-2xl border border-stone-200 space-y-3">
           <h3 class="text-xs font-bold uppercase tracking-wider text-stone-900 flex items-center gap-2">
-            <i data-lucide="scissors" class="w-4 h-4 text-amber-600"></i> Jeans, Shorts y Joggers
+            <i data-lucide="scissors" class="w-4 h-4 text-amber-600"></i> Jeans, Shorts, Bermudas y Joggers
           </h3>
           <div class="bg-white p-3 rounded-xl border border-stone-200 flex items-center justify-center">
             <svg class="w-36 h-36 text-stone-800" viewBox="0 0 200 200" fill="none" stroke="currentColor">
               <path d="M60 35 L140 35 L148 180 L115 180 L100 85 L85 180 L52 180 Z" fill="#f5f5f4" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
               <line x1="60" y1="35" x2="140" y2="35" stroke="#d97706" stroke-width="2.5" stroke-dasharray="4 3"/>
+              <circle cx="60" cy="35" r="3" fill="#d97706"/>
+              <circle cx="140" cy="35" r="3" fill="#d97706"/>
               <text x="100" y="27" fill="#d97706" font-size="11" font-weight="bold" text-anchor="middle">CINTURA</text>
+              <line x1="100" y1="35" x2="100" y2="85" stroke="#2563eb" stroke-width="2.5" stroke-dasharray="4 3"/>
+              <circle cx="100" cy="35" r="3" fill="#2563eb"/>
+              <circle cx="100" cy="85" r="3" fill="#2563eb"/>
+              <text x="106" y="65" fill="#2563eb" font-size="10" font-weight="bold">TIRO</text>
               <line x1="145" y1="35" x2="145" y2="180" stroke="#059669" stroke-width="2.5" stroke-dasharray="4 3"/>
+              <circle cx="145" cy="35" r="3" fill="#059669"/>
+              <circle cx="145" cy="180" r="3" fill="#059669"/>
               <text x="150" y="115" fill="#059669" font-size="11" font-weight="bold">LARGO</text>
             </svg>
           </div>
-          <p class="text-[11px] text-stone-600">• <strong>Cintura:</strong> Ancho plano abotonado. • <strong>Largo:</strong> Cintura a botamanga.</p>
+          <p class="text-[11px] text-stone-600">• <strong>Cintura:</strong> Ancho plano abotonado.<br>• <strong>Tiro:</strong> Entrepierna a cintura.<br>• <strong>Largo:</strong> Cintura a botamanga.</p>
         </div>
       </div>
 
+      <div class="bg-amber-50 p-4 rounded-2xl border border-amber-200 text-xs text-amber-950 space-y-1">
+        <p class="font-bold flex items-center gap-1.5 text-amber-900">
+          <i data-lucide="refresh-cw" class="w-4 h-4 shrink-0 text-amber-700"></i> Política de Cambios (Plazo 48 hs):
+        </p>
+        <p class="leading-relaxed">
+          Prendas nuevas con medidas exactas cargadas. Se aceptan cambios dentro de las <strong>48 horas</strong> de entregada o retirada la prenda, <strong>sin excepciones</strong>, coordinando por WhatsApp.
+        </p>
+      </div>
+
       <button onclick="closeSizeGuideModal()" class="w-full py-3 bg-stone-900 hover:bg-stone-800 text-white font-bold rounded-xl text-xs transition">
-        Cerrar
+        Cerrar guía
       </button>
     </div>
   </div>
@@ -234,7 +257,7 @@
             </div>
           </div>
 
-          <!-- DESCRIPCIÓN / FALLAS / OBSERVACIONES (IDEA 4) -->
+          <!-- DESCRIPCIÓN / FALLA / OBSERVACIÓN OPICIONAL -->
           <div id="modalDescriptionBox" class="hidden bg-amber-50/70 p-3 rounded-2xl border border-amber-200/80 text-xs text-amber-950 flex items-start gap-2">
             <i data-lucide="info" class="w-4 h-4 text-amber-700 shrink-0 mt-0.5"></i>
             <div>
@@ -253,11 +276,11 @@
               <div id="modalSizeButtons" class="flex flex-wrap gap-2"></div>
             </div>
 
-            <!-- Medidas (Ocultable si está en blanco - IDEA 3) -->
+            <!-- Medidas (Se oculta si no aplica) -->
             <div id="modalMeasurementsWrapper" class="pt-2 border-t border-stone-200/60">
               <div class="flex items-center justify-between mb-1">
                 <span class="text-xs text-stone-500 flex items-center gap-1 font-semibold">
-                  <i data-lucide="ruler" class="w-3.5 h-3.5 text-amber-600"></i> Medidas sobre prenda plana:
+                  <i data-lucide="ruler" class="w-3.5 h-3.5 text-amber-600"></i> Medidas tomadas sobre prenda plana:
                 </span>
                 <button onclick="openSizeGuideModal()" class="text-[11px] text-amber-700 hover:text-amber-800 font-bold underline">
                   Ver cómo medimos
@@ -303,7 +326,7 @@
           <span id="cartSubtotal" class="font-semibold text-stone-800">$0</span>
         </div>
         <div class="flex justify-between text-emerald-600 text-xs font-semibold">
-          <span>Ahorro:</span>
+          <span>Ahorro en liquidación:</span>
           <span id="cartSavings">-$0</span>
         </div>
         <div class="flex justify-between text-base font-black text-stone-900 pt-2 border-t border-stone-200">
@@ -339,7 +362,7 @@
 
       <div class="bg-amber-50 p-2.5 rounded-xl border border-amber-200 flex items-start gap-2 text-[11px] text-amber-900 leading-tight">
         <i data-lucide="info" class="w-4 h-4 shrink-0 text-amber-600 mt-0.5"></i>
-        <span>Cambios dentro de las <strong>48 hs</strong> sin excepción coordinando por WhatsApp. Envío a cotizar.</span>
+        <span>Cambios dentro de las <strong>48 hs</strong> sin excepción coordinando por WhatsApp. Costo de envío a cotizar según zona.</span>
       </div>
 
       <button 
@@ -352,7 +375,7 @@
     </div>
   </div>
 
-  <!-- BOTÓN FLOTANTE (Posicionado a la izquierda para no tapar Netlify) -->
+  <!-- BOTÓN FLOTANTE (A la izquierda para no tapar Netlify) -->
   <aside aria-label="Contacto rápido" class="fixed bottom-5 left-5 z-40">
     <button 
       onclick="openDirectWhatsAppInquiry()" 
@@ -377,12 +400,19 @@
     const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRkEooRYSmyuC8XOkLxhZ9_6r8KT910RtZj2mjuoqgv8o2NE-psTdixkznJ5vsZXn3AiCh-k9lojXK8/pub?gid=0&single=true&output=csv";
     const PLACEHOLDER_IMG = "https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=600";
 
-    // ORDEN OFICIAL DE TALLES (Estandarización - IDEA 2)
+    // ORDEN OFICIAL DE TALLES
     const SIZE_ORDER = [
       "XS", "S", "M", "L", "XL", "XXL", "2XL",
       "36", "38", "40", "42", "44", "46", "48", "50",
       "3XL", "4XL", "5XL", "6XL", "7XL", "ÚNICO"
     ];
+
+    // DEFINICIÓN DE GRUPOS DE TALLE
+    const SIZE_GROUPS = {
+      letras: ["XS", "S", "M", "L", "XL", "XXL", "2XL"],
+      numeros: ["36", "38", "40", "42", "44", "46", "48", "50", "52", "54"],
+      especiales: ["3XL", "4XL", "5XL", "6XL", "7XL"]
+    };
 
     let inventory = [];
     let cart = [];
@@ -436,7 +466,6 @@
       return result;
     }
 
-    // Parsea talles soportando precios diferenciados por talle (IDEA 1) y stock (ej: "S, M:2, 5XL($33000)")
     function parseSizeInventory(rawTalle, defaultPrice) {
       if (!rawTalle) return { 'ÚNICO': { stock: 1, price: defaultPrice } };
       const map = {};
@@ -446,7 +475,6 @@
         let clean = part.toUpperCase();
         let customPrice = defaultPrice;
 
-        // Detectar si el talle tiene un precio especial entre paréntesis: 5XL($33000)
         const priceMatch = clean.match(/\(\$?([0-9\.]+)\)/);
         if (priceMatch) {
           customPrice = cleanPrice(priceMatch[1]);
@@ -470,7 +498,6 @@
       return Object.keys(map).length > 0 ? map : { 'ÚNICO': { stock: 1, price: defaultPrice } };
     }
 
-    // Comprueba si una medida es válida o debe omitirse (IDEA 3)
     function isValidMeasurement(text) {
       if (!text) return false;
       const clean = text.trim().toLowerCase();
@@ -523,7 +550,7 @@
               talles: Object.keys(sizeDataMap),
               color: obj.color || '-',
               medidas: obj.medidas || '',
-              descripcion: obj.descripcion || '', // Columna opcional IDEA 4
+              descripcion: obj.descripcion || '',
               precio_original: cleanPrice(obj.precio_original),
               precio_oferta: basePrice,
               stock: stockVal,
@@ -544,7 +571,6 @@
       }
     }
 
-    // Ordenamiento estandarizado inteligente de talles (IDEA 2)
     function sortSizes(sizesArray) {
       return [...sizesArray].sort((a, b) => {
         const idxA = SIZE_ORDER.indexOf(a);
@@ -557,7 +583,6 @@
     }
 
     function initFilters() {
-      // Categorías
       const categories = ["all", ...new Set(inventory.map(i => i.categoria).filter(Boolean))];
       const catContainer = document.getElementById("categoryFilters");
       catContainer.innerHTML = categories.map(cat => `
@@ -566,21 +591,24 @@
         </button>
       `).join("");
 
-      // Talles
       renderSizeButtons();
     }
 
     function setSizeGroup(grp) {
       activeSizeGroup = grp;
+      activeSize = "all";
+
       ["all", "letras", "numeros", "especiales"].forEach(g => {
         const btn = document.getElementById(`grp-${g}`);
         if (btn) {
           btn.className = (g === grp) 
-            ? "px-2.5 py-1 rounded-lg font-bold transition bg-stone-900 text-white" 
+            ? "px-2.5 py-1 rounded-lg font-bold transition bg-stone-900 text-white shadow-sm" 
             : "px-2.5 py-1 rounded-lg font-bold transition text-stone-600 hover:text-stone-900";
         }
       });
+
       renderSizeButtons();
+      applyFilters();
     }
 
     function renderSizeButtons() {
@@ -588,13 +616,12 @@
       inventory.forEach(i => i.talles.forEach(sz => allSizes.add(sz)));
       let sorted = sortSizes(Array.from(allSizes));
 
-      // Filtrado por grupo seleccionado
       if (activeSizeGroup === 'letras') {
-        sorted = sorted.filter(s => ["XS", "S", "M", "L", "XL", "XXL", "2XL"].includes(s));
+        sorted = sorted.filter(s => SIZE_GROUPS.letras.includes(s));
       } else if (activeSizeGroup === 'numeros') {
-        sorted = sorted.filter(s => /^[0-9]+$/.test(s));
+        sorted = sorted.filter(s => SIZE_GROUPS.numeros.includes(s) || /^[0-9]+$/.test(s));
       } else if (activeSizeGroup === 'especiales') {
-        sorted = sorted.filter(s => ["3XL", "4XL", "5XL", "6XL", "7XL"].includes(s));
+        sorted = sorted.filter(s => SIZE_GROUPS.especiales.includes(s));
       }
 
       const sizeContainer = document.getElementById("sizeFilters");
@@ -644,12 +671,27 @@
 
     function applyFilters() {
       const q = document.getElementById("searchInput").value.toLowerCase().trim();
+
       const filtered = inventory.filter(p => {
         const matchCat = (activeCategory === "all" || p.categoria.toLowerCase() === activeCategory.toLowerCase());
+
+        let matchGroup = true;
+        if (activeSizeGroup !== "all" && SIZE_GROUPS[activeSizeGroup]) {
+          const groupAllowed = SIZE_GROUPS[activeSizeGroup];
+          matchGroup = p.talles.some(sz => groupAllowed.includes(sz));
+        }
+
         const matchSize = (activeSize === "all" || p.talles.includes(activeSize));
-        const matchQuery = !q || p.nombre.toLowerCase().includes(q) || p.id.toLowerCase().includes(q) || p.color.toLowerCase().includes(q) || p.categoria.toLowerCase().includes(q);
-        return matchCat && matchSize && matchQuery;
+
+        const matchQuery = !q || 
+          p.nombre.toLowerCase().includes(q) || 
+          p.id.toLowerCase().includes(q) || 
+          p.color.toLowerCase().includes(q) || 
+          p.categoria.toLowerCase().includes(q);
+
+        return matchCat && matchGroup && matchSize && matchQuery;
       });
+
       renderCatalog(filtered);
     }
 
@@ -706,7 +748,6 @@
                   ${p.nombre}
                 </h3>
                 
-                <!-- MEDIDAS: Solo se muestra si tiene datos reales (IDEA 3) -->
                 ${hasValidMeasurements ? `
                   <p class="text-[11px] text-stone-600 mt-1 flex items-center gap-1 bg-stone-50 p-1.5 rounded-lg border border-stone-200">
                     <i data-lucide="ruler" class="w-3 h-3 text-amber-600 shrink-0"></i>
@@ -714,7 +755,6 @@
                   </p>
                 ` : ''}
 
-                <!-- DESCRIPCIÓN CORTA SI EXISTE (IDEA 4) -->
                 ${p.descripcion ? `
                   <p class="text-[10px] text-amber-800 font-medium mt-1 line-clamp-1 bg-amber-50/70 px-2 py-0.5 rounded border border-amber-200/50">
                     • ${p.descripcion}
@@ -756,7 +796,6 @@
       document.getElementById("modalBadgeCategory").textContent = prod.categoria;
       document.getElementById("modalTitle").textContent = prod.nombre;
 
-      // Descripción / Falla opcional (IDEA 4)
       const descBox = document.getElementById("modalDescriptionBox");
       const descText = document.getElementById("modalDescriptionText");
       if (prod.descripcion && prod.descripcion.trim().length > 0) {
@@ -766,7 +805,6 @@
         descBox.classList.add("hidden");
       }
 
-      // Ocultar pastilla de medidas si está vacía (IDEA 3)
       const measWrapper = document.getElementById("modalMeasurementsWrapper");
       if (isValidMeasurement(prod.medidas)) {
         measWrapper.classList.remove("hidden");
@@ -790,7 +828,6 @@
       
       hint.textContent = sizeInfo.stock > 1 ? `(${sizeInfo.stock} disponibles)` : `(Última unidad disponible)`;
 
-      // Actualizar precio dinámico si el talle tiene precio especial (IDEA 1)
       const currentPrice = sizeInfo.price || modalCurrentProduct.precio_oferta;
       document.getElementById("modalPrice").textContent = `$${currentPrice.toLocaleString('es-AR')}`;
 
